@@ -1,0 +1,5 @@
+# Background {.unnumbered}
+
+This book contains background material for general R basics, as well as some of the packages and functions that we will use during the EpidemiaR training lessons. 
+
+Additional materials and resources:

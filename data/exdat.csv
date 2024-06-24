@@ -1,0 +1,4 @@
+houseid,p1_test,p1_result,p2_test,p2_result,p3_test,p3_result
+A,1,1,1,0,,
+B,1,0,,,,
+C,1,0,1,1,1,0

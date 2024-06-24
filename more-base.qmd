@@ -1,0 +1,265 @@
+---
+title: "More base R functions"
+---
+
+This section contains additional functions and tools that we will use in later sections during the EpidemiaR Training workshop.
+
+## Concatenating strings and printing messages
+
+In R, `paste()` and `paste0()` are functions used to concatenate strings, while `message()` is used to print messages to the console. Understanding these functions helps in creating more informative and readable outputs, as well as in debugging and providing user feedback.
+
+### `paste()` Function
+
+The `paste()` function concatenates strings with a specified separator.
+
+**Syntax:**
+```r
+paste(..., sep = " ", collapse = NULL)
+```
+- `...`: One or more R objects to be concatenated.
+- `sep`: A string to separate the terms (default is a space).
+- `collapse`: An optional string to separate the results when concatenating vectors.
+
+**Examples:**
+
+1. Concatenating strings with spaces:
+   ```r
+   str1 <- "Hello"
+   str2 <- "World"
+   result <- paste(str1, str2)
+   print(result)
+   # Output: "Hello World"
+   ```
+
+2. Using a different separator:
+   ```r
+   result <- paste("A", "B", "C", sep = "-")
+   print(result)
+   # Output: "A-B-C"
+   ```
+
+3. Collapsing a vector into a single string:
+   ```r
+   words <- c("apple", "banana", "cherry")
+   result <- paste(words, collapse = ", ")
+   print(result)
+   # Output: "apple, banana, cherry"
+   ```
+
+### `paste0()` Function
+
+The `paste0()` function is a shortcut for `paste(..., sep = "")`. It concatenates strings without any separator.
+
+**Syntax:**
+```r
+paste0(...)
+```
+- `...`: One or more R objects to be concatenated.
+
+**Examples:**
+
+1. Concatenating strings without spaces:
+   ```r
+   str1 <- "Hello"
+   str2 <- "World"
+   result <- paste0(str1, str2)
+   print(result)
+   # Output: "HelloWorld"
+   ```
+
+2. Concatenating multiple strings:
+   ```r
+   result <- paste0("A", "B", "C")
+   print(result)
+   # Output: "ABC"
+   ```
+
+### `message()` Function
+
+The `message()` function is used to print a message to the console. Unlike `print()`, it sends its output to the standard message stream and is often used for warnings, informational messages, and debugging.
+
+**Syntax:**
+```r
+message(...)
+```
+- `...`: One or more R objects to be printed.
+
+**Examples:**
+
+1. Printing a simple message:
+   ```r
+   message("This is an informational message.")
+   # Output: This is an informational message.
+   ```
+
+2. Combining `paste()` with `message()`:
+   ```r
+   name <- "John"
+   age <- 30
+   message(paste("Name:", name, "Age:", age))
+   # Output: Name: John Age: 30
+   ```
+
+3. Combining `paste0()` with `message()`:
+   ```r
+   prefix <- "ID_"
+   id <- 1234
+   message(paste0("Generated ID: ", prefix, id))
+   # Output: Generated ID: ID_1234
+   ```
+
+## Loading objects and data files
+
+### R objects and data
+
+R provides several functions for saving and loading data, allowing you to preserve your workspace and share data with others. The `save()` and `load()` functions save and restore entire R workspaces, while `saveRDS()` and `readRDS()` handle individual R objects.
+
+#### `save()` and `load()` Functions
+
+The `save()` function saves R objects to a specified file, which can be loaded back into the R environment using the `load()` function.
+
+**save() Syntax:**
+```r
+save(..., file)
+```
+- `...`: R objects to be saved.
+- `file`: A character string naming the file to save the data to.
+
+**load() Syntax:**
+```r
+load(file)
+```
+- `file`: A character string naming the file to load the data from.
+
+**Examples:**
+
+1. Saving multiple objects:
+   ```r
+   x <- 1:10
+   y <- letters[1:10]
+   save(x, y, file = "data.RData")
+   ```
+
+2. Loading the saved objects:
+   ```r
+   load("data.RData")
+   print(x)
+   print(y)
+   ```
+
+#### `saveRDS()` and `readRDS()` functions
+
+The `saveRDS()` function saves a single R object to a file, and `readRDS()` restores it. Unlike `save()`, `saveRDS()` does not save the object name, so you can assign it any name when you load it.
+
+**saveRDS() Syntax:**
+```r
+saveRDS(object, file)
+```
+- `object`: The R object to be saved.
+- `file`: A character string naming the file to save the object to.
+
+**readRDS() Syntax:**
+```r
+readRDS(file)
+```
+- `file`: A character string naming the file to read the object from.
+
+**Examples:**
+
+1. Saving a single object:
+   ```r
+   z <- matrix(1:9, nrow = 3)
+   saveRDS(z, file = "matrix.RDS")
+   ```
+
+2. Loading the saved object:
+   ```r
+   my_matrix <- readRDS("matrix.RDS")
+   print(my_matrix)
+   ```
+
+Using `load()`, `save()`, `saveRDS()`, and `readRDS()` functions in R enables you to efficiently save and restore your data. Whether you need to save entire workspaces or individual objects, these functions provide flexible options for data persistence and sharing.
+
+
+### CSV and Excel files
+
+## Loading CSV and Excel Files into R
+
+Reading data from CSV and Excel files is a common task in data analysis. R provides functions to easily load these files into your workspace for analysis.
+
+#### Loading CSV Files
+
+To load CSV files, use the `read.csv()` or `readr::read_csv()` functions. The `readr` package's `read_csv()` is often preferred for its speed and efficiency.
+
+**`read.csv()` Syntax:**
+```r
+data <- read.csv(file, header = TRUE, sep = ",")
+```
+- `file`: Path to the CSV file.
+- `header`: Logical value indicating if the file contains a header row.
+- `sep`: Character separating the values (default is a comma).
+
+**Example:**
+```r
+data <- read.csv("path/to/yourfile.csv")
+print(head(data))
+```
+
+**`readr::read_csv()` Syntax:**
+```r
+library(readr)
+data <- read_csv("path/to/yourfile.csv")
+print(head(data))
+```
+
+#### Loading Excel Files
+
+To load Excel files, use the `readxl` package, which provides the `read_excel()` function.
+
+**Syntax:**
+```r
+library(readxl)
+data <- read_excel(path, sheet = 1)
+```
+- `path`: Path to the Excel file.
+- `sheet`: Sheet number or name to read from (default is the first sheet).
+
+**Example:**
+```r
+library(readxl)
+data <- read_excel("path/to/yourfile.xlsx", sheet = "Sheet1")
+print(head(data))
+```
+
+Using `read.csv()`, `readr::read_csv()`, and `read_excel()` functions, you can easily load CSV and Excel files into R for analysis. These functions provide a straightforward way to import your data and begin your analysis quickly.
+
+
+## Source an entire R script
+
+Sometimes you may want to run an entire script all at once. This can be useful when using multiple scripts that must be run in a structured order, or when storing all of your custom functions in a separate script. 
+
+We can use the `source()` function to execute an entire script at once.
+
+**Example:**
+```r
+script_file <- file.path("path/to/yourscript.R")
+source(script_file)
+```
+
+This will run all of the operations in that script in your active R sessions. All libraries, variables, and functions that are loaded or created in your sourced script will then be available in your session. 
+
+You can use the `exists()` function to create to make sure that the path you provide leads to an existing script. This function will return either `TRUE` or `FALSE`. This is also useful for checking if a data file is present in an expected location before loading and execute additional functions, especially when combined in an `if` statement.
+
+A few things to watch out for:
+1. Loading libraries may cause name conflicts for functions with shared names. 
+2. Similarly, sourcing a script will overwrite existing variables with the same name.
+3. Sourcing script may take a long time depending on the complexity of the script.
+
+## Additional base R functions
+
+Here are some additional functions that you may encounter in during the EpidemiaR Training sections.
+
+* `Sys.Date()`/`Sys.Time()` will return the active data or time.
+* `nrow()` will return the number of rows in a dataframe.
+* `length()` will return the number of objects in a vector, or the number of columns in a dataframe. 
+* `unique()` will return all of the unique entries in a vector.

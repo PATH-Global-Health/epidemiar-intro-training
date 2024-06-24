@@ -1,0 +1,121 @@
+---
+title: "Using `if` statements"
+---
+
+Conditional statements are fundamental in programming, allowing for decision-making based on different conditions. In R, the primary conditional statement is the `if` statement, which can be used alone or combined with `else` and `else if` for more complex logic.
+
+## Basic If Statement
+
+The basic `if` statement checks a condition and executes a block of code if the condition is true.
+
+**Syntax:**
+```r
+if (condition) {
+  # code to execute if the condition is true
+}
+```
+
+**Example:**
+```r
+x <- 10
+
+if (x > 5) {
+  print("x is greater than 5")
+}
+```
+
+## If-Else Statement
+
+To execute a block of code when the condition is false, use an `else` statement.
+
+**Syntax:**
+```r
+if (condition) {
+  # code to execute if the condition is true
+} else {
+  # code to execute if the condition is false
+}
+```
+
+**Example:**
+```r
+x <- 3
+
+if (x > 5) {
+  print("x is greater than 5")
+} else {
+  print("x is not greater than 5")
+}
+```
+
+### If-Else If-Else Statement
+
+For multiple conditions, use `else if` to check additional conditions.
+
+**Syntax:**
+```r
+if (condition1) {
+  # code to execute if condition1 is true
+} else if (condition2) {
+  # code to execute if condition2 is true
+} else {
+  # code to execute if none of the conditions are true
+}
+```
+
+**Example:**
+```r
+x <- 7
+
+if (x > 10) {
+  print("x is greater than 10")
+} else if (x > 5) {
+  print("x is greater than 5 but less than or equal to 10")
+} else {
+  print("x is 5 or less")
+}
+```
+
+## Nested If Statements
+
+You can also nest if statements inside one another to check multiple levels of conditions.
+
+**Example:**
+```r
+x <- 15
+y <- 20
+
+if (x > 10) {
+  if (y > 15) {
+    print("x is greater than 10 and y is greater than 15")
+  } else {
+    print("x is greater than 10 but y is not greater than 15")
+  }
+} else {
+  print("x is 10 or less")
+}
+```
+
+### Vectorized If Statements
+
+When working with vectors, `ifelse` is a more efficient way to apply conditional logic.
+
+**Syntax:**
+```r
+ifelse(test, yes, no)
+```
+- `test`: A logical condition.
+- `yes`: The value to return if the condition is true.
+- `no`: The value to return if the condition is false.
+
+**Example:**
+```r
+x <- c(2, 7, 5, 10)
+
+result <- ifelse(x > 5, "Greater than 5", "5 or less")
+print(result)
+```
+
+## Conclusion
+
+Using if statements in R allows you to execute code based on conditions, making your programs more dynamic and flexible. Whether you're using a simple `if` statement, adding `else` and `else if` for more complex logic, or applying conditional logic to vectors with `ifelse`, mastering these constructs is essential for effective programming in R.

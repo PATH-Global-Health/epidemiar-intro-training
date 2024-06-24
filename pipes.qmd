@@ -1,0 +1,197 @@
+---
+title: "Chaining multiple steps using pipes"
+---
+Sure! Here's a step-by-step tutorial on using pipes in R:
+
+---
+
+Pipes are a powerful tool in R that enable a more readable and efficient way of chaining multiple operations. The `%>%` pipe operator, introduced by the `magrittr` package and widely popularized by the `dplyr` package in the `tidyverse`, allows you to pass the result of one function directly into the next function.
+
+## Pipes in `tidyverse`
+
+To use pipes, you'll need to install and load the `magrittr` or `tidyverse` package. Remember that you only need to install the package one time, but you will have to load `tidyverse` if you want to use the pipe in a given script. 
+
+**Install `tidyverse`:**
+```r
+install.packages("tidyverse")
+```
+
+**Load the `tidyverse` package:**
+```r
+library(tidyverse)
+```
+
+### Basic Pipe Syntax
+
+The pipe operator `%>%` takes the output from the left-hand side and uses it as the first argument for the function on the right-hand side.
+
+**Syntax:**
+```r
+data %>% 
+  function1() %>%
+  function2() %>%
+  function3()
+```
+
+#### Example without Pipes
+
+Consider the following operations on a data frame without using pipes:
+
+**Example:**
+```r
+library(dplyr)
+
+data <- mtcars
+filtered_data <- filter(data, cyl == 6)
+selected_data <- select(filtered_data, mpg, hp)
+summarized_data <- summarize(selected_data, mean_mpg = mean(mpg), mean_hp = mean(hp))
+
+print(summarized_data)
+```
+
+#### Example with Pipes
+
+The same operations can be performed more concisely using pipes:
+
+**Example:**
+```r
+library(dplyr)
+
+mtcars %>%
+  filter(cyl == 6) %>%
+  select(mpg, hp) %>%
+  summarize(mean_mpg = mean(mpg), mean_hp = mean(hp)) %>%
+  print()
+```
+
+### Using Pipes with Custom Functions
+
+Pipes can also be used with custom functions. Define your function and use it within a pipe.
+
+**Example:**
+```r
+custom_function <- function(df) {
+  df %>%
+    filter(gear == 4) %>%
+    select(mpg, wt)
+}
+
+mtcars %>%
+  custom_function() %>%
+  head()
+```
+
+### Using the Dot Placeholder
+
+Sometimes, the data does not automatically fit as the first argument in the next function. In such cases, use the dot (`.`) as a placeholder.
+
+**Example:**
+```r
+mtcars %>%
+  filter(cyl == 4) %>%
+  select(mpg, wt) %>%
+  {
+    n <- nrow(.)
+    mean_wt <- mean(.$wt)
+    data.frame(n = n, mean_wt = mean_wt)
+  }
+```
+
+### Nesting Pipes
+
+Pipes can be nested for more complex operations. This is particularly useful when combining multiple data frames or performing multi-step operations.
+
+**Example:**
+```r
+data1 <- mtcars %>%
+  filter(cyl == 6) %>%
+  select(mpg, hp)
+
+data2 <- mtcars %>%
+  filter(cyl == 4) %>%
+  select(mpg, wt)
+
+combined_data <- bind_rows(data1, data2)
+print(combined_data)
+```
+
+Using pipes in R enhances code readability and efficiency, allowing you to write more concise and maintainable code. Whether performing simple data manipulations or complex data transformations, pipes streamline your workflow by reducing the need for intermediate variables and nested function calls.
+
+
+## Native Pipe Operator in R (R 4.1+)
+
+Starting with R version 4.1, a native pipe operator (`|>`) was introduced, providing an alternative to the `%>%` pipe from the `magrittr` package. The native pipe is part of the base R language, eliminating the need to load external packages for basic piping operations.
+
+### Basic Syntax
+
+The native pipe operator works similarly to the `%>%` operator but uses `|>` instead.
+
+**Syntax:**
+```r
+data |> 
+  function1() |>
+  function2() |>
+  function3()
+```
+
+Here is an example using traditional function chaining without the native pipe:
+
+**Example:**
+```r
+data <- mtcars
+filtered_data <- filter(data, cyl == 6)
+selected_data <- select(filtered_data, mpg, hp)
+summarized_data <- summarize(selected_data, mean_mpg = mean(mpg), mean_hp = mean(hp))
+
+print(summarized_data)
+```
+
+The same operations can be performed more concisely using the native pipe:
+
+**Example:**
+```r
+mtcars |>
+  (\(df) filter(df, cyl == 6))() |>
+  (\(df) select(df, mpg, hp))() |>
+  (\(df) summarize(df, mean_mpg = mean(mpg), mean_hp = mean(hp)))() |>
+  print()
+```
+
+### Using Native Pipe with Custom Functions
+
+Native pipes can also be used with custom functions, providing a clean and readable way to chain operations.
+
+**Example:**
+```r
+custom_function <- function(df) {
+  df |>
+    filter(gear == 4) |>
+    select(mpg, wt)
+}
+
+mtcars |>
+  custom_function() |>
+  head()
+```
+
+### Using the Dot Placeholder
+
+While the native pipe does not use the dot (`.`) placeholder in the same way as `%>%`, it can still be used flexibly with anonymous functions.
+
+**Example:**
+```r
+mtcars |>
+  (\(df) filter(df, cyl == 4))() |>
+  (\(df) select(df, mpg, wt))() |>
+  (\(df) {
+    n <- nrow(df)
+    mean_wt <- mean(df$wt)
+    data.frame(n = n, mean_wt = mean_wt)
+  })()
+```
+
+The introduction of the native pipe operator in R 4.1 provides a built-in and efficient way to chain operations, enhancing code readability without relying on external packages. While it lacks some of the tools of `%>%`, such as the dot placeholder, it integrates seamlessly with base R functions and custom workflows.
+
+You may encounter both types of pipes, and most often they work interchangeably. However, it is important to note the stuble differences between the tidyverse and native pipes, especially when debugging errors. 
+
+Also, remember that the native pipe is relatively new (R 4.1 waws released in 2022), so if you have not updated R in a long time than you will not have acesss to the native pipe.
