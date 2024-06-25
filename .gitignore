@@ -8,3 +8,6 @@
 .httr-oauth
 .DS_Store
 .quarto
+
+/_book/
+/site_libs/

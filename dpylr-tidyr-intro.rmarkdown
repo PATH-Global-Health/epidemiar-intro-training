@@ -1,0 +1,561 @@
+---
+title: "Data manipulation with `*dplyr*` and `*tidyr*`"
+---
+
+```{r setup t2, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = F, fig.width = 12, dev="cairo_pdf", out.width = "864", out.height = "720")
+```
+
+
+# **Data Manipulation with dplyr and tidyr**
+
+## **The power of packages**
+
+One of the great things about using R are the thousands of available packages, which provide additional functions for many analytical tasks, such as data cleaning, statistical modelling, mapping, and much more. R packages are open-source, which means that they are free to use and maintained by the R community.
+
+### **Installing and loading packages**
+
+Throughout the rest of this training we will use a set of R packages manipulating data and creating plots and maps. As we covered in Chapter 1, we first need to install the package on our computer using the `install.packages()` function. This only needs to be done one time (you probably already did this earlier).
+
+
+```{r install-packages t2, eval=FALSE}
+install.packages("dplyr")
+```
+
+
+Once the package has been installed, we can load it into our current R session using the `library()` function. Unlike installing, you will need to load the library each time you want to use it. This is because some libraries may have functions with the same names as other libraries or as our variables.
+
+
+```{r load-lib t2}
+library(dplyr) 
+```
+
+
+For the next series of exercises, we will be using a group of packages which have been designed to work together to do common data science tasks. This [group of packages is called the "Tidyverse"](https://www.tidyverse.org/), because it is designed to work within the ["tidy" data philosophy](https://r4ds.had.co.nz/tidy-data.html#tidy-data-1):
+
+<!-- [![](https://d33wubrfki0l68.cloudfront.net/6f1ddb544fc5c69a2478e444ab8112fb0eea23f8/91adc/images/tidy-1.png "Tidy data")](https://r4ds.had.co.nz/tidy-data.html#tidy-data) -->
+
+![](hs_images/02_tidy-1.png)
+
+Some important qualities of this philosophy is that our data should have the following format:
+
+1.  Each column should be a single variable with one data type.
+2.  Each row should be a single observation.
+3.  Each cell should be a single value contains **one** piece of information.
+
+We can install all of these packages at once using `install.package("tidyverse")`. Remember that we only install the package once, so it is actually better to type this directly into the console instead of in our R script since it does not need to be repeated. Also be aware that this may take some time especially if internet quality is poor. After the package has finished installing it is ready to be loaded into our R session.
+
+
+```{r load-tidy t2}
+library(tidyverse)
+```
+
+
+## **Reading data into R**
+
+Once the **`tidyverse`** package is loaded into our session we will have access to all of the functions in each of the Tidyverse packages. This includes packages for loading, manipulating, and plotting data. The function we will use is `read_csv()` to read in the district-level data we worked with previously. Note that this is [similar but slightly different to the read.csv()](https://r4ds.had.co.nz/data-import.html#compared-to-base-r) function we used in our previous exercise.
+
+
+```{r read-cases t2}
+scram_num <- function(x, offset = 0.5){
+  set.seed(10)
+  round(runif(1, x*offset, x*(1+offset)))
+}
+
+case_data <- read_csv("data/district-cases-long.csv") %>%
+  rowwise() %>%
+  mutate(count = scram_num(count))
+```
+
+
+This is the same dataset we used in Chapter 1 (values scrambled to prevent unauthorized access to confidential data), only this time we called the object `case_data` instead of `dat`. It's good practice to name your objects something short and meaningful, so that it's easy to type and remember (this is especially useful when you have multiple data objects).
+
+Also, in this file the data are organized in "long" format, whereas the file used in Chapter 1 was in "wide" format. We will discuss the difference between "long" and "wide" formatted data in this chapter, as well as how to change the shape of our data.
+
+### **Inspecting data**
+
+Like in the previous exercise, we can use the `head()` and `summary()` functions to view aspects of the dataframe. We can also use the `view()` function to open the entire file in the R Studio Viewer, however view large files (millions of rows) can cause R Studio to crash. We can also install additional packages, such as **`skimr`** to get an even more detailed summary (run `install.package("skimr")` in your console).
+
+
+```{r view-data t2, eval=FALSE}
+head(case_data)
+str(case_data)
+summary(case_data)
+
+# Using skimr package, remember to install first!
+library(skimr)
+skim(case_data)
+```
+
+
+<!-- \textcolor{red}{Question 1: How many rows and columns are in case_data?} -->
+
+<!-- \textcolor{red}{Question 2: What "type" of data are each column (character, vector, etc.)?} -->
+
+> Question 1: How many rows and columns are in case_data?
+
+> Question 2: What "type" of data are each column (character, vector, etc.)?
+
+## **Data manipulation using `*tidyverse*`**
+
+In Chapter 1 we learned some built-in functions, or "base" functions, for simple data manipulations such as selecting a specific column or filter for only rows that match some criteria. In this lesson we will learn the `*tidyverse*` approach to these and additional common data manipulation tasks, using two packages called `*dplyr*` and `*tidyr*`. The `*dplyr*` package provides functions for the most common data manipulations jobs, and the `*tidyr*`package provides functions for reshaping or pivoting dataframes (similar to pivot tables in Microsoft Excel).
+
+### **Selecting columns and filtering rows**
+
+To select a specific column from a dataframe, use the `select()` functions. The first argument will always be the dataframe object that you're working with, followed by the name(s) of the column or columns you want to select.
+
+
+```{r select-columns t2, eval=FALSE}
+# Select just one column (province)
+select(case_data, province)
+# Select multiple columns
+select(case_data, district, data_type, count)
+```
+
+
+To select all the columns **except** certain ones, you can use a `-` in front of the column name.
+
+
+```{r t2 select, eval=FALSE}
+# Select all but one column
+select(case_data, -province)
+# Removing multiple columns
+select(case_data, -period, -province)
+```
+
+
+To choose specific rows based on some criteria, use `filter()`. Again, the first argument will be the dataframe, then the following argument will be the condition that we want use to subset the data.
+
+
+```{r t2 filter}
+filter(case_data, province == "Eastern")
+```
+
+
+Notice here that just like in Chapter 1 use have to use a `==` sign for setting a condition. You read this as saying, "choose the rows in `case_data` where province is equal to"Eastern". Also notice that the number of rows in the object has gone down from `r nrow(case_data)` to `r nrow(filter(case_data, province == "Eastern"))`.
+
+We can filter on multiple conditions at once using multiple arguments, using a `,` to state separate conditions.
+
+
+```{r t2 filter2}
+filter(case_data, province == "Eastern", data_type == "Clinical")
+```
+
+
+By default, each of the conditions in `filter()` must be TRUE to remain in the subset, however there are special operators that allow for more complex conditional operations. The most common are the AND (`&`) and OR (`|`) operators. Here are some examples:
+
+
+```{r t2 filter3, eval=FALSE}
+# Province is Easter AND data type is Clinical 
+filter(case_data, province == "Eastern" & data_type == "Clinical")
+
+# Province is Eastern OR data type is Clinical 
+filter(case_data, province == "Eastern" | data_type == "Clinical")
+
+# Province is Central OR Eastern, AND count is over 1,000
+filter(case_data, province == "Central" | province == "Eastern", count > 1000)
+```
+
+
+<!-- > $\color{red}{\text{Question 3: Why did we not use & in the third example?}}$ -->
+
+> Question 3: Why did we not use & in the third example?
+
+Another useful operator is the MATCH operator (`%in%`), which will return TRUE if a value matches any value in a list of possible options.
+
+
+```{r t2 filter4}
+# Keep rows where data type could be Clinical, Confirmed, or Tested
+filter(case_data, data_type %in% c("Clinical", "Confirmed", "Tested"))
+
+# Keep rows from a group of selected districts
+study_districts <- c("Chadiza", "Chipata", "Katete", "Lumezi")
+filter(case_data, district %in% study_districts)
+```
+
+
+> Question 4: Can you show all of the "Tested" data in Western Province?
+
+> Question 5: Can you show all "Confirmed" that have a count over 2000?
+
+Finally, the `!` operator in R used for NOT or opposite conditions. The most common use cases are for using NOT EQUAL (`!=`) or does NOT MATCH operations.
+
+
+```{r t2 filter5}
+# Keep all rows where province is NOT Lusaka
+filter(case_data, province != "Lusaka")
+
+# Keep rows where data type does NOT match Clinical, Confirmed, or Tested
+filter(case_data, !data_type %in% c("Clinical", "Confirmed", "Tested"))
+```
+
+
+Note that for NOT EQUAL the `!` operator comes right next to the `=` sign, but for the NOT MATCH condition the `!` comes before the condition state. In the second case you can read that as, "do the opposite of this condition".
+
+> Question 6a: Create a table for all malaria tests (health facility and CHW) in Western and Southern Province in 2020.
+
+> Question 6b: Create a table for all malaria tests (health facility and CHW) NOT in Western and Southern Province in 2020.
+
+> Question 7a: Create a table for all clinical and confirmed cases that are over 500.
+
+> Question 7b: Create a table for all data that are NOT clinical and confirmed cases that are over 500.
+
+The types of conditional states that you can use depends on the type of column you want to base your `filter()`on. For example, `filter(case_data, count > 1000)` makes sense since the `count` column contains `numeric` data. However, `filter(case_data, province > 1000)` doesn't make sense since the `province` column contains `character` data. The rule of thumb is that the value you use to set your condition should match the "type" of data in selected column.
+
+In the next section, we see how to deal with a special case:
+
+### **Working with dates using the `*lubridate*` package**
+
+In the "tidy" data approach to working with data each column is a specific type of data, each row is an observation, and each cell is an individual value which conveys a single piece of information. Our dataset matches this philosophy, except for the "period" values, which contain information on the year, month, and day of the observation.
+
+We could create separate columns for the year, month, and day, but this may complicate our filtering. For instance, what happens if we want to filter for a study period that continues across over parts of adjacent months or year? Such a common task would require complex set of conditional statements to filter correctly.
+
+The `*lubridate*` package provides a number of functions to make working with data much easier. This is not included in `*tidyverse*`, so we have to install and then load it into our session.
+
+
+```{r t2 lub}
+# install.packages(lubridate)
+library(lubridate)
+```
+
+
+The `ymd()` function allows us to create a `Date` class object based on the string input for YEAR-MONTH-DAY:
+
+
+```{r t2 dates}
+# Vector of workshop days
+workshop_days <- c("2021-11-15", "2021-11-16", "2021-11-17", "2021-11-18","2021-11-19")
+class(workshop_days)
+
+# Convert to a Date class
+workshop_days <- ymd(workshop_days)
+class(workshop_days)
+```
+
+
+Once you have a Date class object, `*lubridate*` provides many, many functions for working with date information. The primary functions we will use in this workshop are `year()` and `month()`, but there are many more in [this `*lubridate*` cheatsheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/lubridate.pdf).
+
+
+```{r t2 time}
+year(workshop_days)
+month(workshop_days)
+month(workshop_days, label = TRUE)
+```
+
+
+These functions can be used in `filter()`.
+
+
+```{r t2 filter6}
+filter(case_data, year(period) == 2020)
+filter(case_data, between(period, ymd("2019-01-01"), ymd("2019-06-30")))
+```
+
+
+<!-- > $\color{red}{\text{Question 4: What where the reported total tests in Chadiza district each month during 2018?}}$ -->
+
+<!-- > $\color{red}{\text{Question 5 (HARD): What the monthly clinical cases in Chadiza during the rainy season (November to March?}}$ -->
+
+<!-- > \textcolor{red}{Question 4: What where the reported total tests in Chadiza district each month during 2018?} -->
+
+<!-- > \textcolor{red}{Question 5 (HARD): What the monthly clinical cases in Chadiza during the rainy season (November to March?} -->
+
+> Question 8: What were the reported total tests (HF and CHW) in Chadiza district each month during 2018?
+
+> Question 9: How many tests (HF and CHW) were conducted in April 2020 in Nchelenge district?
+
+> Question 10 (HARD): What were the monthly confirmed cases in Chadiza during the peak transmission season (December to May) each year?
+
+### **Creating new columns with `mutate()`**
+
+Another common task is creating new columns based on values in existing columns. The `*dplyr*` function for this action is `mutate()`.
+
+Here is an example using the `*lubridate*` function from the section above to make a column for the year of observation:
+
+
+```{r t2 mutate}
+mutate(case_data, year = year(period))
+```
+
+
+First, state the name for the new column, then `=` followed by the function for the new value. You can create multiple new columns in a single `mutate()` call, using a `,` to separate each column.
+
+
+```{r t2 mutate2}
+mutate(case_data,
+    year = year(period), 
+    month_num = month(period),
+    month_name = month(period, label = TRUE))
+```
+
+
+Remember that if you want to save any changes you will have to save the output into an object using the `<-` assignment operator.
+
+
+```{r t2 dplyr}
+case_data_dates <- mutate(case_data,
+    year = year(period), 
+    month_num = month(period),
+    month_name = month(period, label = TRUE))
+```
+
+
+In later sections we will see how to use `mutate()` to make calculations.
+
+> Question 11: Can you add a new variable (column) to the dataset that gives the **quarter** of the year?
+
+> Question 12: Can you add a new variable (column) to the dataset that gives just the last 2 digits of the year? i.e. 2021 becomes 21
+
+## **Use Pipes to combine steps**
+
+What if you want to select and filter at the same time? There are three ways to do this: use intermediate steps, nested functions, or pipes.
+
+For intermediate steps, we need to create a new intermediate object for the output of our first function, which will then be used as an input for the second function:
+
+
+```{r t2 dplyr2}
+case_data_lusaka_confirmed <- filter(case_data, province == "Lusaka", data_type == "Confirmed")
+case_data_lusaka_district_months <- select(case_data_lusaka_confirmed, district, period, count)
+case_data_lusaka_district_months
+```
+
+
+This approach is readable, but it can quickly clutter up your workspace and take up additional memory. And if you're trying to use meaningful object names it can get tedious quickly.
+
+You can also nest the functions (one function inside of the another).
+
+
+```{r t2 dplyr3}
+case_data_lusaka_district_months <- select(
+  filter(case_data, province == "Lusaka", data_type == "Confirmed"), 
+  district, period, count)
+```
+
+
+This doesn't clutter the workshop or take up unnecessary memory, but it is difficult to read especially since R will interpret these steps from the inside out (first filter, then select).
+
+The last option is to use pipes, a new addition to R. A pipe lets you take the output from one function and input it directly into the next function. By default, this will automatically go into the first argument of the new function. This is useful for stringing together multiple data cleaning steps while maintaining readability and keeping our environment clear. The `*tidyverse*` package includes a pipe function which looks like `%>%`. In RStudio, the shortcut for this pipe is Ctrl + Shift + M if you have a PC or Cmd + Shift + M if you have a Mac. You can adjust this shortcut under Tools \>\> Modify Keyboard Shortcuts...
+
+Here's an example of using a pipe for combine the filter and select from the previous example.
+
+
+```{r t2 dplyr4}
+case_data %>% 
+  filter(province == "Lusaka", data_type == "Confirmed") %>% 
+  select(district, period, count)
+```
+
+
+In this code, we used a pipe to send `case_data` into a `filter()` function and keep the rows for confirmed cases in Lusaka province, then used another pipe to send that output into a `select()` where we only kept the district, period, and count columns. We didn't need to explicitly state the data object in the filter and select because data is always the first argument.
+
+You may find it helpful to read the pipe like the word "then". Take the case, then filter for Lusaka province and confirmed cases, then select the districts, periods, and counts. We can also save this into a new object.
+
+
+```{r t2 dplyr5}
+lusaka_confirmed_cases <- case_data %>% 
+  filter(province == "Lusaka", data_type == "Confirmed") %>% 
+  select(district, period, count)
+```
+
+
+<!-- > $\color{red}{\text{Question 6: Using pipes, create a table contain the clincal cases in January 2019 for each district in Southern Province. The table should only have two columns (district and counts)}}$ -->
+
+<!-- > \textcolor{red}{Question 6: Using pipes, create a table contain the clincal cases in January 2019 for each district in Southern Province. The table should only have two columns (district and counts)} -->
+
+> Question 13: Using pipes, create a table contain the confirmed cases in January 2019 for each district in Southern Province. The table should only have two columns (district and counts)
+
+### **Grouping and summarizing data**
+
+Another common data manipulation tasks involve grouping data together and applying summary functions such as calculating means or totals. We can do some of these types of operations already. For instance, we can get the total number of clinical cases in Lusaka Province.
+
+
+```{r t2 dplyr6}
+lusaka_clinical <- case_data %>% 
+  filter(data_type == "Clinical", province == "Lusaka")
+sum(lusaka_clinical$count, na.rm = T)
+```
+
+
+But what if we want to get summaries for each province at once? We could repeat the steps above, separating each province, calculating the totals, and then grouping these summaries back together. In programming this concept is often referred to as the **split-apply-combine** paradigm. The key `*dplyr*` functions for these tasks are `group_by()` and `summarize()` (you can also use the "proper" `summarise()` spelling as well).
+
+First, `group_by()` takes in a column that contains categorical data, then use `summarize()` to calculate new summary statistics.
+
+
+```{r t2 dplyr7}
+case_data %>% 
+  filter(data_type == "Tested") %>% 
+  group_by(province) %>% 
+  summarise(mean_tested = mean(count, na.rm = TRUE))
+```
+
+
+You can also group by more than one column, and output multiple columns within a single `summarize()` call.
+
+
+```{r t2 dplyr8}
+case_data %>% 
+  filter(data_type == "Tested") %>% 
+  group_by(province, district, year(period)) %>% 
+  summarise(mean_tested_per_month = mean(count, na.rm = TRUE), 
+            total_tested_per_month = sum(count, na.rm = TRUE))
+```
+
+```{r t2 dplyr9}
+case_data %>% 
+  filter(data_type == "Tested") %>% 
+  group_by(province, district, year(period)) %>% 
+  summarise(mean_tested_per_month = mean(count, na.rm = TRUE), 
+            total_tested_per_month = sum(count, na.rm = TRUE))
+```
+
+
+Sometimes it is useful to rearrange the result of our summarized dataset, in which case we can use the `arrange()` function.
+
+
+```{r t2 dplyr10}
+case_data %>% 
+  filter(data_type == "Tested", 
+         year(period) == 2019) %>% 
+  group_by(district, period) %>% 
+  summarise(total_tested_per_month = sum(count)) %>% 
+  arrange(total_tested_per_month)
+```
+
+
+By default arranging with be in ascending order, you can use `desc()` to make the output descending.
+
+
+```{r t2 dplyr11}
+case_data %>% 
+  filter(data_type == "Tested", 
+         year(period) == 2019) %>% 
+  group_by(district, period) %>% 
+  summarise(total_tested_per_month = sum(count)) %>% 
+  arrange(desc(total_tested_per_month))
+```
+
+
+<!-- > $\color{red}{\text{Question 6: What were the total number of confirmed cases in each province in 2019?}}$ -->
+
+<!-- > $\color{red}{\text{Question 7: What were the total number of cases (Clinical and Confirmed) in each month for all provinces?}}$ -->
+
+<!-- > $\color{red}{\text{Question 8 (HARD): What were the total number of cases (Clinical and Confirmed) in the rainy and dry seasons for each district in Southern Province?}}$ -->
+
+<!-- > \textcolor{red}{Question 7: What were the total number of confirmed cases in each province in 2019? -->
+
+<!-- > \textcolor{red}{Question 8: What were the total number of cases (Clinical and Confirmed) in each month for all provinces?} -->
+
+<!-- > \textcolor{red}{Question 9 (HARD): What were the total number of cases (Clinical and Confirmed) in the rainy and dry seasons for each district in Southern Province?} -->
+
+> Question 14: What were the total number of confirmed cases in each province in 2019?
+
+> Question 15: What were the total number of cases (Clinical and Confirmed) in each month for all provinces for each year?
+
+> Question 16 (HARD): What were the total number of cases (Clinical and Confirmed) in the peak (dec - may) and the low (june - nov) transmission seasons for each district in Southern Province during the 2019/2020 transmission season (i.e. Dec 2019 - Nov 2020)?
+
+## **Reshaping data with `*tidyr*`**
+
+So far we have covered a bunch of `*dplyr*` functions for manipulating data, most of which have changed the number of rows and/or columns in our dataframe. However, even though the columns, rows, and values have changed none of these have changed the "structure" of the dataframe. At the end of each function or piped function, the output always followed the conditions we discussed early:
+
+1.  Each column should be a single variable with one data type.
+2.  Each row should be a single observation.
+3.  Each cell should be a single value contains **one** piece of information.
+
+This is commonly referred to as "long" format data, and often this means that there are relatively more rows than columns. Typically it is best to work in "long" format data, especially in R, however there are instances when we may want to change the "shape" of our data into the "wide" format. In Microsoft Excel this would be called creating a Pivot Table.
+
+The `*tidyr*` package provides functions for reshaping data, including creating "wide" format pivot tables. To illustrate, lets take a look at records for a single district at a single timepoint.
+
+
+```{r t2 dplyr12}
+case_data %>% 
+  filter(district == "Chadiza", period == ymd("2020-01-01"))
+```
+
+
+The resulting table has six rows, because there are six different types of records included. But what if we wanted to create a table where there is a separate column for each type of record? The `pivot_wider()` function will allow us to create this kind of "wide" format table. This function requires us to state the column which our column names will come from (`names_from`), and which column the values in the new columns will come from (`values_from`).
+
+
+```{r t2 dplyr13}
+case_data %>% 
+  filter(district == "Chadiza", period == ymd("2020-01-01")) %>% 
+  pivot_wider(names_from = data_type, values_from = count)
+```
+
+
+The resulting output just has one row, but new columns for each of the types of records. This "wide" format is often useful for creating summary tables.
+
+The opposite function is called `pivot_longer()`, which will take in a "wide" format table and output a "long" format table. For `pivot_longer()` we need to state the column name for the "key" which provides the label, the column names for the values, and which columns we want to pivot on. Here is how we can convert the above example from "wide" format to "long" format.
+
+
+```{r t2 wide}
+wide_data <- case_data %>% 
+  filter(district == "Chadiza", period == ymd("2020-01-01")) %>% 
+  pivot_wider(names_from = data_type, values_from = count)
+
+
+wide_data %>% 
+  pivot_longer(
+    names_to = "data_type", values_to = "count", 
+    cols = c(Confirmed, Confirmed_Passive_CHW, Tested, 
+             Tested_Passive_CHW))
+
+```
+
+
+<!-- > $\color{red}{\text{Question 10: Create a table that countains the total number of confirmed cases each year for each province, where the rows are the year and there is a column for each province.}}$ -->
+
+<!-- > \textcolor{red}{Question 10: Create a table that countains the total number of confirmed cases each year for each province, where the rows are the year and there is a column for each province.} -->
+
+> Question 17: Create a table that contains the total number of confirmed cases each year for each province, then pivot wider to make it so the rows are the year and there is a column for each province.
+
+Think of this as a multi-step process\
+1. Filter for confirmed cases\
+2. Work out which columns you are grouping by (i.e. what are we grouping over....think geography/time?)\
+3. Look at the output so far - what do we now want to sum over for our table?\
+4. Now we need to pivot wider - we want to make new columns - where do those names to come from (names_from)?, where will we find the values to populate the new cells (values_from)?
+
+> Question 17b: Can you make this table longer again, where we now have 3 columns - year, province and count
+
+> Question 18: Create a table that contains the total number of CHW tests for each district and each year in Luapula Province, now pivot wider to make each district its own column where year is now the row - start by writing out the steps 1 by 1 as above
+
+## **Final Exercises**
+
+> (1) For each province, calculate the total number of tests conducted by CHWs each year and present as a wide dataframe, where each column is a year and each row is a province and finally, order the dataframe such that the province with the most tests in 2020 is at the top
+
+> (2) For each district in Eastern Province, calculate the test positivity rate at health facilities and by CHWs in 2020 (Test positivity = confirmed cases / total tests)
+
+Tips for Final Exercises 1. Start by filtering your data - what geographical region, year, and data types do we need?\
+2. Now we need to pivot wider - how can we now have data_type as our column names?\
+3. Now we need to group_by - what are we grouping by?\
+4. Almost there!! Now we need to sum up some columns - how can we do this?\
+5. Now to calculate TPR - let's use the mutate function\
+6. Now let's use the 'select' function to retrieve the columns we want
+
+## **Function cheatsheet**
+
+-   [Main cheat sheet page](https://www.rstudio.com/resources/cheatsheets/)
+-   [`*dplyr*` cheat sheet link](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf)
+-   [`lubridate` cheat sheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/lubridate.pdf)
+-   [`tidyr` cheat sheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/tidyr.pdf)
+
+`*dplyr*` functions
+
+-   `select()`: subset columns
+-   `filter()`: subset rows on condition
+-   `mutate()`: create new columns
+-   `group_by()`: group data by one or more column
+-   `summarise()`: create summaries from dataframe (works within groups)
+-   `arrange()`: reorder dataframe based on ascending order (use `desc()` to invert)
+
+`*tidyr*` functions
+
+-   `pivot_wider()`: go from "long" to "wide" format
+-   `pivot_longer()`: go from "wide" to "long" format
+
+`*lubridate*` functions
+
+-   `ymd()`: convert class to date object based on "YYYY-MM-DD"
+-   `year()`: return the year from a date input
+-   `month()`: return the month from a date input
+-   `quarter()`: return the year quarter (1,2,3,4) from a date input
+

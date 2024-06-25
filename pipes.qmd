@@ -1,9 +1,6 @@
 ---
 title: "Chaining multiple steps using pipes"
 ---
-Sure! Here's a step-by-step tutorial on using pipes in R:
-
----
 
 Pipes are a powerful tool in R that enable a more readable and efficient way of chaining multiple operations. The `%>%` pipe operator, introduced by the `magrittr` package and widely popularized by the `dplyr` package in the `tidyverse`, allows you to pass the result of one function directly into the next function.
 

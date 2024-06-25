@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>EpidemiaR Introductiory Materials - 6&nbsp; Data manipulation with *dplyr* and *tidyr*</title>
+<title>EpidemiaR Introductiory Materials - 5&nbsp; Data manipulation with *dplyr* and *tidyr*</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,6 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./joins.html" rel="next">
 <link href="./pipes.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -107,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dpylr-tidyr-intro.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data manipulation with `*dplyr*` and `*tidyr*`</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./dpylr-tidyr-intro.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data manipulation with `*dplyr*` and `*tidyr*`</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -135,37 +136,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">index.html</span></span></a>
+ <span class="menu-text">Background</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./base-r-intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to R and Rstudio and basic functions</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R and Rstudio and basic functions</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./if-statements.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using <code>if</code> statements</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Using <code>if</code> statements</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./more-base.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">More base R functions</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">More base R functions</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./pipes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Chaining multiple steps using pipes</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Chaining multiple steps using pipes</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./dpylr-tidyr-intro.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data manipulation with <code>*dplyr*</code> and <code>*tidyr*</code></span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data manipulation with <code>*dplyr*</code> and <code>*tidyr*</code></span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Joining data in tidyverse</span></span></a>
   </div>
 </li>
     </ul>
@@ -178,29 +185,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#data-manipulation-with-dplyr-and-tidyr" id="toc-data-manipulation-with-dplyr-and-tidyr" class="nav-link active" data-scroll-target="#data-manipulation-with-dplyr-and-tidyr"><span class="header-section-number">7</span> <strong>Data Manipulation with dplyr and tidyr</strong></a>
+  <li><a href="#data-manipulation-with-dplyr-and-tidyr" id="toc-data-manipulation-with-dplyr-and-tidyr" class="nav-link active" data-scroll-target="#data-manipulation-with-dplyr-and-tidyr"><span class="header-section-number">6</span> <strong>Data Manipulation with dplyr and tidyr</strong></a>
   <ul class="collapse">
-  <li><a href="#the-power-of-packages" id="toc-the-power-of-packages" class="nav-link" data-scroll-target="#the-power-of-packages"><span class="header-section-number">7.1</span> <strong>The power of packages</strong></a>
+  <li><a href="#the-power-of-packages" id="toc-the-power-of-packages" class="nav-link" data-scroll-target="#the-power-of-packages"><span class="header-section-number">6.1</span> <strong>The power of packages</strong></a>
   <ul class="collapse">
-  <li><a href="#installing-and-loading-packages" id="toc-installing-and-loading-packages" class="nav-link" data-scroll-target="#installing-and-loading-packages"><span class="header-section-number">7.1.1</span> <strong>Installing and loading packages</strong></a></li>
+  <li><a href="#installing-and-loading-packages" id="toc-installing-and-loading-packages" class="nav-link" data-scroll-target="#installing-and-loading-packages"><span class="header-section-number">6.1.1</span> <strong>Installing and loading packages</strong></a></li>
   </ul></li>
-  <li><a href="#reading-data-into-r" id="toc-reading-data-into-r" class="nav-link" data-scroll-target="#reading-data-into-r"><span class="header-section-number">7.2</span> <strong>Reading data into R</strong></a>
+  <li><a href="#reading-data-into-r" id="toc-reading-data-into-r" class="nav-link" data-scroll-target="#reading-data-into-r"><span class="header-section-number">6.2</span> <strong>Reading data into R</strong></a>
   <ul class="collapse">
-  <li><a href="#inspecting-data" id="toc-inspecting-data" class="nav-link" data-scroll-target="#inspecting-data"><span class="header-section-number">7.2.1</span> <strong>Inspecting data</strong></a></li>
+  <li><a href="#inspecting-data" id="toc-inspecting-data" class="nav-link" data-scroll-target="#inspecting-data"><span class="header-section-number">6.2.1</span> <strong>Inspecting data</strong></a></li>
   </ul></li>
-  <li><a href="#data-manipulation-using-tidyverse" id="toc-data-manipulation-using-tidyverse" class="nav-link" data-scroll-target="#data-manipulation-using-tidyverse"><span class="header-section-number">7.3</span> <strong>Data manipulation using <code>*tidyverse*</code></strong></a>
+  <li><a href="#data-manipulation-using-tidyverse" id="toc-data-manipulation-using-tidyverse" class="nav-link" data-scroll-target="#data-manipulation-using-tidyverse"><span class="header-section-number">6.3</span> <strong>Data manipulation using <code>*tidyverse*</code></strong></a>
   <ul class="collapse">
-  <li><a href="#selecting-columns-and-filtering-rows" id="toc-selecting-columns-and-filtering-rows" class="nav-link" data-scroll-target="#selecting-columns-and-filtering-rows"><span class="header-section-number">7.3.1</span> <strong>Selecting columns and filtering rows</strong></a></li>
-  <li><a href="#working-with-dates-using-the-lubridate-package" id="toc-working-with-dates-using-the-lubridate-package" class="nav-link" data-scroll-target="#working-with-dates-using-the-lubridate-package"><span class="header-section-number">7.3.2</span> <strong>Working with dates using the <code>*lubridate*</code> package</strong></a></li>
-  <li><a href="#creating-new-columns-with-mutate" id="toc-creating-new-columns-with-mutate" class="nav-link" data-scroll-target="#creating-new-columns-with-mutate"><span class="header-section-number">7.3.3</span> <strong>Creating new columns with <code>mutate()</code></strong></a></li>
+  <li><a href="#selecting-columns-and-filtering-rows" id="toc-selecting-columns-and-filtering-rows" class="nav-link" data-scroll-target="#selecting-columns-and-filtering-rows"><span class="header-section-number">6.3.1</span> <strong>Selecting columns and filtering rows</strong></a></li>
+  <li><a href="#working-with-dates-using-the-lubridate-package" id="toc-working-with-dates-using-the-lubridate-package" class="nav-link" data-scroll-target="#working-with-dates-using-the-lubridate-package"><span class="header-section-number">6.3.2</span> <strong>Working with dates using the <code>*lubridate*</code> package</strong></a></li>
+  <li><a href="#creating-new-columns-with-mutate" id="toc-creating-new-columns-with-mutate" class="nav-link" data-scroll-target="#creating-new-columns-with-mutate"><span class="header-section-number">6.3.3</span> <strong>Creating new columns with <code>mutate()</code></strong></a></li>
   </ul></li>
-  <li><a href="#use-pipes-to-combine-steps" id="toc-use-pipes-to-combine-steps" class="nav-link" data-scroll-target="#use-pipes-to-combine-steps"><span class="header-section-number">7.4</span> <strong>Use Pipes to combine steps</strong></a>
+  <li><a href="#use-pipes-to-combine-steps" id="toc-use-pipes-to-combine-steps" class="nav-link" data-scroll-target="#use-pipes-to-combine-steps"><span class="header-section-number">6.4</span> <strong>Use Pipes to combine steps</strong></a>
   <ul class="collapse">
-  <li><a href="#grouping-and-summarizing-data" id="toc-grouping-and-summarizing-data" class="nav-link" data-scroll-target="#grouping-and-summarizing-data"><span class="header-section-number">7.4.1</span> <strong>Grouping and summarizing data</strong></a></li>
+  <li><a href="#grouping-and-summarizing-data" id="toc-grouping-and-summarizing-data" class="nav-link" data-scroll-target="#grouping-and-summarizing-data"><span class="header-section-number">6.4.1</span> <strong>Grouping and summarizing data</strong></a></li>
   </ul></li>
-  <li><a href="#reshaping-data-with-tidyr" id="toc-reshaping-data-with-tidyr" class="nav-link" data-scroll-target="#reshaping-data-with-tidyr"><span class="header-section-number">7.5</span> <strong>Reshaping data with <code>*tidyr*</code></strong></a></li>
-  <li><a href="#final-exercises" id="toc-final-exercises" class="nav-link" data-scroll-target="#final-exercises"><span class="header-section-number">7.6</span> <strong>Final Exercises</strong></a></li>
-  <li><a href="#function-cheatsheet" id="toc-function-cheatsheet" class="nav-link" data-scroll-target="#function-cheatsheet"><span class="header-section-number">7.7</span> <strong>Function cheatsheet</strong></a></li>
+  <li><a href="#reshaping-data-with-tidyr" id="toc-reshaping-data-with-tidyr" class="nav-link" data-scroll-target="#reshaping-data-with-tidyr"><span class="header-section-number">6.5</span> <strong>Reshaping data with <code>*tidyr*</code></strong></a></li>
+  <li><a href="#final-exercises" id="toc-final-exercises" class="nav-link" data-scroll-target="#final-exercises"><span class="header-section-number">6.6</span> <strong>Final Exercises</strong></a></li>
+  <li><a href="#function-cheatsheet" id="toc-function-cheatsheet" class="nav-link" data-scroll-target="#function-cheatsheet"><span class="header-section-number">6.7</span> <strong>Function cheatsheet</strong></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -210,7 +217,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data manipulation with <code>*dplyr*</code> and <code>*tidyr*</code></span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data manipulation with <code>*dplyr*</code> and <code>*tidyr*</code></span></h1>
 </div>
 
 
@@ -225,13 +232,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="data-manipulation-with-dplyr-and-tidyr" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> <strong>Data Manipulation with dplyr and tidyr</strong></h1>
-<section id="the-power-of-packages" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="the-power-of-packages"><span class="header-section-number">7.1</span> <strong>The power of packages</strong></h2>
+<section id="data-manipulation-with-dplyr-and-tidyr" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> <strong>Data Manipulation with dplyr and tidyr</strong></h1>
+<section id="the-power-of-packages" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="the-power-of-packages"><span class="header-section-number">6.1</span> <strong>The power of packages</strong></h2>
 <p>One of the great things about using R are the thousands of available packages, which provide additional functions for many analytical tasks, such as data cleaning, statistical modelling, mapping, and much more. R packages are open-source, which means that they are free to use and maintained by the R community.</p>
-<section id="installing-and-loading-packages" class="level3" data-number="7.1.1">
-<h3 data-number="7.1.1" class="anchored" data-anchor-id="installing-and-loading-packages"><span class="header-section-number">7.1.1</span> <strong>Installing and loading packages</strong></h3>
+<section id="installing-and-loading-packages" class="level3" data-number="6.1.1">
+<h3 data-number="6.1.1" class="anchored" data-anchor-id="installing-and-loading-packages"><span class="header-section-number">6.1.1</span> <strong>Installing and loading packages</strong></h3>
 <p>Throughout the rest of this training we will use a set of R packages manipulating data and creating plots and maps. As we covered in Chapter 1, we first need to install the package on our computer using the <code>install.packages()</code> function. This only needs to be done one time (you probably already did this earlier).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -255,8 +262,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
-<section id="reading-data-into-r" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="reading-data-into-r"><span class="header-section-number">7.2</span> <strong>Reading data into R</strong></h2>
+<section id="reading-data-into-r" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="reading-data-into-r"><span class="header-section-number">6.2</span> <strong>Reading data into R</strong></h2>
 <p>Once the <strong><code>tidyverse</code></strong> package is loaded into our session we will have access to all of the functions in each of the Tidyverse packages. This includes packages for loading, manipulating, and plotting data. The function we will use is <code>read_csv()</code> to read in the district-level data we worked with previously. Note that this is <a href="https://r4ds.had.co.nz/data-import.html#compared-to-base-r">similar but slightly different to the read.csv()</a> function we used in our previous exercise.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>scram_num <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">offset =</span> <span class="fl">0.5</span>){</span>
@@ -270,8 +277,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>This is the same dataset we used in Chapter 1 (values scrambled to prevent unauthorized access to confidential data), only this time we called the object <code>case_data</code> instead of <code>dat</code>. It’s good practice to name your objects something short and meaningful, so that it’s easy to type and remember (this is especially useful when you have multiple data objects).</p>
 <p>Also, in this file the data are organized in “long” format, whereas the file used in Chapter 1 was in “wide” format. We will discuss the difference between “long” and “wide” formatted data in this chapter, as well as how to change the shape of our data.</p>
-<section id="inspecting-data" class="level3" data-number="7.2.1">
-<h3 data-number="7.2.1" class="anchored" data-anchor-id="inspecting-data"><span class="header-section-number">7.2.1</span> <strong>Inspecting data</strong></h3>
+<section id="inspecting-data" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="inspecting-data"><span class="header-section-number">6.2.1</span> <strong>Inspecting data</strong></h3>
 <p>Like in the previous exercise, we can use the <code>head()</code> and <code>summary()</code> functions to view aspects of the dataframe. We can also use the <code>view()</code> function to open the entire file in the R Studio Viewer, however view large files (millions of rows) can cause R Studio to crash. We can also install additional packages, such as <strong><code>skimr</code></strong> to get an even more detailed summary (run <code>install.package("skimr")</code> in your console).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(case_data)</span>
@@ -292,11 +299,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </blockquote>
 </section>
 </section>
-<section id="data-manipulation-using-tidyverse" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="data-manipulation-using-tidyverse"><span class="header-section-number">7.3</span> <strong>Data manipulation using <code>*tidyverse*</code></strong></h2>
+<section id="data-manipulation-using-tidyverse" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="data-manipulation-using-tidyverse"><span class="header-section-number">6.3</span> <strong>Data manipulation using <code>*tidyverse*</code></strong></h2>
 <p>In Chapter 1 we learned some built-in functions, or “base” functions, for simple data manipulations such as selecting a specific column or filter for only rows that match some criteria. In this lesson we will learn the <code>*tidyverse*</code> approach to these and additional common data manipulation tasks, using two packages called <code>*dplyr*</code> and <code>*tidyr*</code>. The <code>*dplyr*</code> package provides functions for the most common data manipulations jobs, and the <code>*tidyr*</code>package provides functions for reshaping or pivoting dataframes (similar to pivot tables in Microsoft Excel).</p>
-<section id="selecting-columns-and-filtering-rows" class="level3" data-number="7.3.1">
-<h3 data-number="7.3.1" class="anchored" data-anchor-id="selecting-columns-and-filtering-rows"><span class="header-section-number">7.3.1</span> <strong>Selecting columns and filtering rows</strong></h3>
+<section id="selecting-columns-and-filtering-rows" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="selecting-columns-and-filtering-rows"><span class="header-section-number">6.3.1</span> <strong>Selecting columns and filtering rows</strong></h3>
 <p>To select a specific column from a dataframe, use the <code>select()</code> functions. The first argument will always be the dataframe object that you’re working with, followed by the name(s) of the column or columns you want to select.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select just one column (province)</span></span>
@@ -474,8 +481,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The types of conditional states that you can use depends on the type of column you want to base your <code>filter()</code>on. For example, <code>filter(case_data, count &gt; 1000)</code> makes sense since the <code>count</code> column contains <code>numeric</code> data. However, <code>filter(case_data, province &gt; 1000)</code> doesn’t make sense since the <code>province</code> column contains <code>character</code> data. The rule of thumb is that the value you use to set your condition should match the “type” of data in selected column.</p>
 <p>In the next section, we see how to deal with a special case:</p>
 </section>
-<section id="working-with-dates-using-the-lubridate-package" class="level3" data-number="7.3.2">
-<h3 data-number="7.3.2" class="anchored" data-anchor-id="working-with-dates-using-the-lubridate-package"><span class="header-section-number">7.3.2</span> <strong>Working with dates using the <code>*lubridate*</code> package</strong></h3>
+<section id="working-with-dates-using-the-lubridate-package" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="working-with-dates-using-the-lubridate-package"><span class="header-section-number">6.3.2</span> <strong>Working with dates using the <code>*lubridate*</code> package</strong></h3>
 <p>In the “tidy” data approach to working with data each column is a specific type of data, each row is an observation, and each cell is an individual value which conveys a single piece of information. Our dataset matches this philosophy, except for the “period” values, which contain information on the year, month, and day of the observation.</p>
 <p>We could create separate columns for the year, month, and day, but this may complicate our filtering. For instance, what happens if we want to filter for a study period that continues across over parts of adjacent months or year? Such a common task would require complex set of conditional statements to filter correctly.</p>
 <p>The <code>*lubridate*</code> package provides a number of functions to make working with data much easier. This is not included in <code>*tidyverse*</code>, so we have to install and then load it into our session.</p>
@@ -567,8 +574,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Question 10 (HARD): What were the monthly confirmed cases in Chadiza during the peak transmission season (December to May) each year?</p>
 </blockquote>
 </section>
-<section id="creating-new-columns-with-mutate" class="level3" data-number="7.3.3">
-<h3 data-number="7.3.3" class="anchored" data-anchor-id="creating-new-columns-with-mutate"><span class="header-section-number">7.3.3</span> <strong>Creating new columns with <code>mutate()</code></strong></h3>
+<section id="creating-new-columns-with-mutate" class="level3" data-number="6.3.3">
+<h3 data-number="6.3.3" class="anchored" data-anchor-id="creating-new-columns-with-mutate"><span class="header-section-number">6.3.3</span> <strong>Creating new columns with <code>mutate()</code></strong></h3>
 <p>Another common task is creating new columns based on values in existing columns. The <code>*dplyr*</code> function for this action is <code>mutate()</code>.</p>
 <p>Here is an example using the <code>*lubridate*</code> function from the section above to make a column for the year of observation:</p>
 <div class="cell">
@@ -631,8 +638,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </blockquote>
 </section>
 </section>
-<section id="use-pipes-to-combine-steps" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="use-pipes-to-combine-steps"><span class="header-section-number">7.4</span> <strong>Use Pipes to combine steps</strong></h2>
+<section id="use-pipes-to-combine-steps" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="use-pipes-to-combine-steps"><span class="header-section-number">6.4</span> <strong>Use Pipes to combine steps</strong></h2>
 <p>What if you want to select and filter at the same time? There are three ways to do this: use intermediate steps, nested functions, or pipes.</p>
 <p>For intermediate steps, we need to create a new intermediate object for the output of our first function, which will then be used as an input for the second function:</p>
 <div class="cell">
@@ -702,8 +709,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <blockquote class="blockquote">
 <p>Question 13: Using pipes, create a table contain the confirmed cases in January 2019 for each district in Southern Province. The table should only have two columns (district and counts)</p>
 </blockquote>
-<section id="grouping-and-summarizing-data" class="level3" data-number="7.4.1">
-<h3 data-number="7.4.1" class="anchored" data-anchor-id="grouping-and-summarizing-data"><span class="header-section-number">7.4.1</span> <strong>Grouping and summarizing data</strong></h3>
+<section id="grouping-and-summarizing-data" class="level3" data-number="6.4.1">
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="grouping-and-summarizing-data"><span class="header-section-number">6.4.1</span> <strong>Grouping and summarizing data</strong></h3>
 <p>Another common data manipulation tasks involve grouping data together and applying summary functions such as calculating means or totals. We can do some of these types of operations already. For instance, we can get the total number of clinical cases in Lusaka Province.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>lusaka_clinical <span class="ot">&lt;-</span> case_data <span class="sc">%&gt;%</span> </span>
@@ -855,8 +862,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </blockquote>
 </section>
 </section>
-<section id="reshaping-data-with-tidyr" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="reshaping-data-with-tidyr"><span class="header-section-number">7.5</span> <strong>Reshaping data with <code>*tidyr*</code></strong></h2>
+<section id="reshaping-data-with-tidyr" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="reshaping-data-with-tidyr"><span class="header-section-number">6.5</span> <strong>Reshaping data with <code>*tidyr*</code></strong></h2>
 <p>So far we have covered a bunch of <code>*dplyr*</code> functions for manipulating data, most of which have changed the number of rows and/or columns in our dataframe. However, even though the columns, rows, and values have changed none of these have changed the “structure” of the dataframe. At the end of each function or piped function, the output always followed the conditions we discussed early:</p>
 <ol type="1">
 <li>Each column should be a single variable with one data type.</li>
@@ -933,8 +940,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Question 18: Create a table that contains the total number of CHW tests for each district and each year in Luapula Province, now pivot wider to make each district its own column where year is now the row - start by writing out the steps 1 by 1 as above</p>
 </blockquote>
 </section>
-<section id="final-exercises" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="final-exercises"><span class="header-section-number">7.6</span> <strong>Final Exercises</strong></h2>
+<section id="final-exercises" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="final-exercises"><span class="header-section-number">6.6</span> <strong>Final Exercises</strong></h2>
 <blockquote class="blockquote">
 <ol type="1">
 <li>For each province, calculate the total number of tests conducted by CHWs each year and present as a wide dataframe, where each column is a year and each row is a province and finally, order the dataframe such that the province with the most tests in 2020 is at the top</li>
@@ -952,8 +959,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 5. Now to calculate TPR - let’s use the mutate function<br>
 6. Now let’s use the ‘select’ function to retrieve the columns we want</p>
 </section>
-<section id="function-cheatsheet" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="function-cheatsheet"><span class="header-section-number">7.7</span> <strong>Function cheatsheet</strong></h2>
+<section id="function-cheatsheet" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="function-cheatsheet"><span class="header-section-number">6.7</span> <strong>Function cheatsheet</strong></h2>
 <ul>
 <li><a href="https://www.rstudio.com/resources/cheatsheets/">Main cheat sheet page</a></li>
 <li><a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf"><code>*dplyr*</code> cheat sheet link</a></li>
@@ -1223,10 +1230,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./pipes.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Chaining multiple steps using pipes</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Chaining multiple steps using pipes</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./joins.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Joining data in tidyverse</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
