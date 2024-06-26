@@ -1,0 +1,583 @@
+---
+title: 'Introduction to R and Rstudio and basic functions'
+---
+
+```{r include = FALSE, echo=FALSE}
+library(tidyverse)
+library(janitor)
+library(cowsay)
+library(wesanderson)
+```
+
+```{r setup t1, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width = 12, fig.height = 10, dev="cairo_pdf", out.width = "864", out.height = "720")
+```
+
+## Introduction to RStudio
+
+R is a statistical and graphical software package, and is the very commonly used in many disciplines, including data science, statistics and the environmental and biological sciences The great strengths of R for the research community are:
+
+-   It is free, which means anyone can use it.
+-   It is open source, which means you can inspect and modify the code within in.
+-   It is a community, so researchers around the world have developed code for particular applications that they have made freely available. These are published as 'packages' which can be downloaded with just a couple of lines of code.
+-   Because of all the community-developed code, there are functions available in R for pretty much every data analysis, statistical method or model, graphic or chart you could ever need. Once you understand how to use R, you will be able to access these.
+-   There is an incredible amount of help to be found online for most problems (often on stackoverflow and twitter #rstats)
+
+By the end of this unit we will have covered
+
+1.  Opening up Rstudio
+2.  Setting up a project in Rstudio
+3.  Exploring R, finding help, debugging and writing comments
+4.  Different data types
+5.  How to calculate basic operations on vectors
+6.  How to use dataframes
+7.  What packages are and how to install and use them
+8.  How to read in external data sources
+
+Hopefully you have followed the tutorial we shared and have RStudio downloaded and installed on your computer If you open up Rstudio, you will have 3 panels that look like this
+
+![](hs_images/fig_1_Rstudio_basic.PNG){width="90%"}
+
+The first thing you want to do is open up a new **R script**
+
+![](hs_images/fig_2_new_script.PNG){width="70%"}
+
+Your Rstudio will now have 4 panels
+
+![](hs_images/fig_3_windows.PNG){width="70%"}
+
+These screens are:
+
+**Top left:** An "R Script" window -- this is essentially a text editor where you can write code and commands to be run in the console window. You can edit and correct your work here, and save it so you can use it again. I suggest saving regularly, and keep all your successful code here so you can keep working. Try to use informative script names to help your future self, for example you could save this unit's script as "R_training_part1".
+
+**Bottom left:** This is the "R Console" -- this is where the processing is done. You should typically write script code in the "RScript" window and press Ctrl+Enter (or click "Run") to run them in the console. You may sometimes want to type directly in the console to quickly check that new object looks how you expect them to look or run simple checks that you don't want to revisit later.
+
+**Top right:** The "Environment" tab here shows all the data you've loaded and variables/objects you've created.
+
+**Bottom right:** Plots you create will show here. You can also use R Help here: type a function you're using into the search box and you will get information on its inputs ("Arguments") and outputs ("Value"), or in the console write a '?' then the function name, i.e. '?mean' to understand how to use the 'mean' function.
+
+## Setting up a project in RStudio
+
+Projects are a really neat way to work in Rstudio -- it means that all the inputs (i.e. data, scripts) and outputs (i.e. plots, summary tables) are stored in the same place. It also means other people can use the same project and rerun our analyses without having to define new filepaths (which can be a pain!) When starting a new project, it is a really good practice to set up a project and associated file structure.
+
+Firstly go to **file -\> new project**, then select **new directory**, then **new project**
+
+![](hs_images/fig_4_projects.PNG){width="70%"}
+
+Define your directory (folder) name (I'd suggest something like **R_training_workshop\_\[date\]**)\
+Then use the **browse** option to save this folder somewhere sensible for you (I tend to save things like this in a training folder on my box drive)
+
+![](hs_images/fig_5_projects2.PNG){width="70%"}
+
+Now you have a new project!
+
+The next step is to open up a file explorer window and locate this folder
+
+Manually create three new subfolders called **data**, **scripts** and **plots** -- everything we use and create during this workshop will be stored here for easy reference and will be able to be reproduced by other or yourself on a different computer
+
+![](hs_images/fig_6_projects3.PNG){width="70%"}
+
+## Exploring R, finding help, debugging and writing comments
+
+We can now start using R -- the simplest thing to do is just to use R as a basic calculator. You can write equations in the script and run them in the console to do simple calculations
+
+```{r basic sums}
+20 * 10.5
+17 + 23 - 7
+```
+
+There are also a wide range of mathematical functions such as log(), sqrt(), exp()
+
+```{r fs 1}
+sqrt(25)
+```
+
+If you don't know what an inbuilt function does, type a '?' before its name, and the help page will appear on the right hand side of your screen:
+
+```{r help 1, eval = FALSE}
+?sqrt
+```
+
+**A note on errors** -- these happen *ALL THE TIME!* A large part of learning to code is learning how to spot and fix your errors -- this is called debugging (a great hobby for malaria researchers!)
+
+For example, try the following - why do they not work?
+
+```{r help 2, eval = FALSE}
+sqrt(a)
+sqrt("a")
+SQRT(25)
+sqrt(25))
+```
+
+If your code isn't working, the first few things to check are:
+
+-   Have you spelt the variable names and function names correctly?\
+-   Do the objects you're working with exist?\
+-   Do you have the '\>' appearing in the console window? If not something didn't run properly so press **Esc** a few times until it reappears.
+
+**A note on commenting code** - it is really good practice to comment your code - this means writing brief descriptions of what you've done.
+
+By adding the '\#' before a line of code, it will not be run as code in your console
+
+```{r help 3, eval = FALSE}
+# write in a description here so you can remember what you did in the future!
+# here I am using the formula for the area of a circle pi * r^2
+area_of_cirlce <- pi * 4 ^2
+```
+
+You can also comment out (i.e. add a \# before them) lines of code that are maybe wrong or not needed in an analysis before you decide if you need to actually delete them or not.
+
+## Data types
+
+R can store and organize data, parameter, variables of lots of different types -- we will now explore a few of them:
+
+### Numbers
+
+Single numbers can be given names like this
+
+```{r s4_1}
+my_first_variable <- 20
+my_first_variable
+```
+
+Important to think about how to name variables -- do you want to be quick, or do you want your code to make sense to you and others in the future! We can use both uninformative and informative variable names
+
+```{r s4_2}
+b <- 2/10
+malaria_prevalence_2020 <- 2/10
+```
+
+The "\<-" operator tells R to take the number to the right of the symbol and store it in the variable named on the left (You could also use"=")
+
+**Note: R is case sensitive** so for example, the variable 'malaria_prevalence_2020' is different than 'Malaria_prevalence_2020'. Variable names cannot begin with numbers, and you cannot have 'spaces' in your variable names (we normally use an underscore '\_' where we might want a space).
+
+You'll probably create lots of variable names, and you might forget some of them. You can list all the ones in your session using
+
+```{r s4_3}
+ls()
+```
+
+You can overwrite a variable at any point, for example,
+
+```{r s4_3b}
+test_variable <- 15
+test_variable
+
+test_variable <- 20
+test_variable
+```
+
+In R programming, the terms 'variable' and 'object' are often used interchangeably.
+
+Note: some variable names are not allowed - variables cannot begin with a number or punctuation. It is not a good idea to name variables after in-built R functions - i.e not a good idea to name a variable 'sum' or 'mean' - we will see very shortly that these words already have a purpose in R!
+
+### Strings
+
+Strings are like numbers (in that they represent only one object), but text instead:
+
+```{r s4_4}
+my_first_string  <- "avocado"
+my_first_string
+```
+
+Now, try this:
+
+```{r s4_5, eval = FALSE}
+my_first_string  * my_first_string
+```
+
+What happens? Why? If you're not sure what type of data your object is, you can use this function:
+
+```{r s4_6}
+class(my_first_string)
+class(my_first_variable)
+```
+
+Here, "character" is the name of the datatype of strings, and "double" is a type of number. You can also use the functions "typeof" and "str" to find out about an object (try them out!).
+
+### Vectors
+
+Vectors and lists are the same kind of object, and represent a set of variables (numbers, strings) in an order. To do this, we use the function 'c' which is short for 'combine'. It combines various objects into a vector. Create these vectors in R:
+
+```{r s4_7}
+v1 <- c(1,2,3,4,5)
+v2 <- c(0.1,0.15,0.2,0.4,0.5)
+v3 <- c("red","blue","green","orange","black")
+```
+
+You can access an individual element by knowing its position in the list. So the 3rd element in the list v1 is found by using square brackets:
+
+```{r s4_8}
+v1[3]
+```
+
+Different types of brackets have different roles in R, so it's important you use the correct type.
+
+-   Square brackets - **\[\]** - are used to access elements of vectors (and dataframes and other complex structures)
+-   Round brackets - **()** - are used to contain the arguments of a function - i.e. in sqrt(25), the argument to the function 'sqrt' is '25'
+
+> $\color{red}{\text{Question 1: What happens if you try to find an element that doesn’t exist?}}$
+
+> $\color{red}{\text{e.g. the 0th or 6th element of v1 - how do you type this and what is the output? }}$
+
+You can calculate summary statistics of, and plot, a vector. What do each of these do?:
+
+```{r s4_9, eval=FALSE}
+mean(v1)
+sd(v1) 
+var(v1)
+min(v1)
+max(v1)
+sum(v1)
+sum(v1[c(1,4)])
+length(v1)
+plot(v1)
+plot(v2,v1)
+```
+
+> $\color{red}{\text{Question 2: What happens if you try to do use these operations on v3 rather than v1?}}$
+
+> $\color{red}{\text{Question 3: Try v1* v2 - What has the operator * done to your vectors? Is that what you expected?}}$
+
+You can create a zero-vector of a given length (e.g. 14) like this:
+
+```{r s4_10}
+v4 <- rep(0, 14)
+```
+
+This literally means - we want to repeat the value '0' 14 times -- you can learn more about the 'rep' function by typing ?rep
+
+You can then add values into your vector, for example:
+
+```{r s4_11}
+v4[1] <- 10
+v4
+```
+
+> $\color{red}{\text{Question 4:What do you think the following will do?  }}$
+
+> $\color{red}{\text{v4[2:14] <- c(11:23) Try to guess before you try it!}}$
+
+Note: the colon operator ':' allows us to create vectors of consecutuve numbers. For example 1:5 creates a vector from 1 to 5. Quickly try creating a vector from 101 to 200.
+
+## Data frames
+
+Data frames are tables that are used for storing data, similar to what you might be used to seeing in excel. R has lots of built-in data sets that you can practice on, including one called CO2. Type
+
+```{r s5_1, eval = FALSE}
+?CO2
+```
+
+to read the documentation. You can load this dataset into R using:
+
+```{r s5_2}
+data("CO2")
+```
+
+To see the data, you could type CO2 but it's quite long. Instead you can look at the first few lines by typing
+
+```{r s5_3}
+ head(CO2)
+```
+
+Or if you want to look at more lines (i.e. the first 20)
+
+```{r s5_4}
+head(CO2, n = 20)
+```
+
+We can see how big this dataset is using the following command
+
+```{r s5_5}
+dim(CO2)
+```
+
+Where the first number is the number of rows and the second number is the number of columns.
+
+> $\color{red}{\text{Q5: What are the column names of this dataset?}}$
+
+You can access individual element of a dataframe by knowing its row and column position. For example, "Quebec" is in third row and second column, so we can find it by typing:
+
+```{r s5_6}
+CO2[3,2]
+```
+
+So the first number refers to the row and the second number the column - we can remember this as CO2\[row, column\]
+
+You can also extract an individual column or row. To extract the sixth row:
+
+```{r s5_7}
+CO2[6,]
+```
+
+or third column:
+
+```{r s5_8}
+CO2[,3]
+```
+
+You can even subset the data, for example if you wanted to create a new dataframe, CO2_op2, which contains all rows but only the second and third columns:
+
+```{r s5_9}
+CO2_op2 <- CO2[,2:3]
+head(CO2_op2)
+```
+
+You can also check what types of data are in each column using the command
+
+```{r s5_10}
+str(CO2)
+```
+
+Three of the columns are called factors -- these are often strings and correspond to a column on which you may want to analyse. They typically represent a variable that has a limited number of values -- for example, sex, age group, or province would be considered factors in a malaria dataset.
+
+We can see a quick summary of the numeric variables using
+
+```{r s5_11}
+summary(CO2)
+```
+
+If we want to explore on column of a dataframe, we use the '\$' operator -- for example,
+
+```{r s5_12}
+CO2$Treatment
+```
+
+Returns just the 'treatment' column
+
+Another useful function to quickly explore data is 'table' -- what does this command return?
+
+```{r s5_13}
+table(CO2$Treatment) 
+```
+
+> $\color{red}{\text{Q6a: What is the value in the 14th row and 5th column?}}$
+
+> $\color{red}{\text{Q6b: What are the values in the 1st to 7th rows of the 4th column}}$
+
+> $\color{red}{\text{Q6c: How many of the samples are from Quebec?}}$
+
+We can also use functions to summarise the numeric data
+
+```{r s5_14}
+mean(CO2$uptake)
+```
+
+> $\color{red}{\text{Q7: What is the range and median of the uptake column? }}$
+
+What if we only want to know the mean of the 'uptake' from Quebec?
+
+This is where we'll touch upon the fact that there are multiple ways to do almost *EVERYTHING* in R!
+
+The traditional 'base R' approach uses the 'which' function to figure out which bits of the data we want to calculate our sum over --
+
+```{r s5_15, eval = FALSE}
+which(CO2$Type == "Quebec") 
+```
+
+This returns a vector with the positions in the column CO2\$Type where the type is Quebec
+
+This is then used inside square brackets to select only these elements of CO2\$conc
+
+```{r s5_16, eval = FALSE}
+CO2$conc[which(CO2$Type == "Quebec")]
+```
+
+```{r s5_17}
+mean(CO2$uptake[which(CO2$Type == "Quebec")])
+```
+
+The **tidyverse** approach, which we are covering in depth tomorrow uses a function called *filter*
+
+```{r s5_18}
+
+op1 = filter(CO2, Type == "Quebec")
+mean(op1$uptake)
+
+```
+
+We can also filter by 2 or more criteria
+
+```{r s5_18b}
+
+op2 = filter(CO2, Type == "Quebec", Treatment == "chilled")
+mean(op2$uptake)
+
+```
+
+> $\color{red}{\text{Can you now fill in this table -  we want the **MEDIAN** uptake value for each treatment-type combination}}$
+
+![](hs_images/fig7_table.PNG){width="60%"}
+
+## Packages
+
+R packages are collections of functions and data sets developed by the community.
+
+They increase the power of R by improving existing base R functionalities, or by adding new ones. There seems to be an R package that does almost everything -- from the most widely used ones
+
+-   **tidyverse** - for data manipulation and analysis
+-   **sf** - everything spatial and map related
+-   **ggplot2** - for a wide range of plots
+-   **janitor** - cleaning data using standard conventions
+
+To the plain ridiculous:
+
+-   **wesanderson** - A library of colour pallettes based on Wes Anderson movies
+-   **cowsay** - Printed animals that say messages
+
+```{r s6_1, fig.height = 1.2, fig.width = 3}
+names(wes_palettes)
+cols = wes_palette("GrandBudapest1")
+cols
+```
+
+```{r s6_2}
+say("My favourite R package is called purrr", by = "cat")
+```
+
+### Installing and using a package
+
+There are two stages to using a package
+
+1)  **Installing** -- think of this as *buying a book and adding it to your library* -- this is an action you only ever need to do once.
+2)  **Loading** -- think of this as *taking the book from your library shelf* -- you need to do this each time you want to use it.
+
+We're going to try and install and use a package called **janitor** (https://cran.r-project.org/web/packages/janitor/vignettes/janitor.html)
+
+```{r s6_3, eval = FALSE}
+install.packages(“janitor”)
+library(janitor)
+```
+
+When installing a new package, I typically either write it straight in the console or comment it out in my script to avoid reinstalling every time I run my code
+
+```{r s6_4}
+# install.packages(“janitor”)
+```
+
+If you want to see all the functions available in a package, there are typically pdf's online of each function and often user guides.\
+You can also remind yourself of functions in a package by typing, for example,
+
+```{r s6_5, eval = FALSE}
+janitor::
+```
+
+In your console or script
+
+> $\color{red}{\text{Q8: Can you install and load either **wesanderson** or **cowsay** packages}}$
+
+> $\color{red}{\text{and generate either a Wes Anderson colour palette or a speaking animal?}}$
+
+## Reading in data
+
+Normally when we analyse data in R we are reading in external data sources - here we learn how to load those into R.
+
+If this training has been shared with you, you should have access to a file called **district-cases-wide.csv** - now manually save this into the **data** folder in your project directory.
+
+We can now read this into R
+
+```{r t1, include=FALSE}
+scram_num <- function(x, offset = 0.5){
+  set.seed(10)
+  round(runif(1, x*offset, x*(1+offset)))
+}
+
+dat = read_csv("data/district-cases-wide.csv") %>%
+  pivot_longer(cols = Clinical:Tested_Passive_CHW, 
+               names_to = "data_type", values_to = "count") %>%
+  rowwise() %>%
+  mutate(count = scram_num(count)) %>%
+  pivot_wider(names_from = "data_type", values_from = "count")
+```
+
+```{r s7_1, eval = FALSE}
+dat <- read_csv("data/district-cases-wide.csv")
+```
+
+This is an aggregated dataset from DHIS2 in Zambia - we have a row for each district-month.\
+We have 5 key bits of data (as well as date, province, district):
+
+-   clinical - number of unconfirmed malaria cases detected at the HF (from HMIS DHIS2)
+-   confirmed - number of RDT confirmed malaria cases detected at the HF (from HMIS DHIS2)
+-   tested - number of RDTs conducted at the HF (from HMIS DHIS2)
+-   confirmed_passive_chw - number of RDT confirmed cases detected passively by CHWs (from NMEC DHIS2)
+-   tested_passive_chw - number of RDTs conducted passively by CHWs (from NMEC DHIS2)
+
+```{r s7_2}
+head(dat)
+```
+
+Note that (depending on your screen size) a few variables are not visible in the console. You can remedy this with the following code:
+
+```{r s7_2b, eval = FALSE}
+options(dplyr.width = Inf)
+```
+
+We can now apply some of the tools we've learnt today to analyse some aggregated DHIS2 data from Zambia.
+
+### Example 1: How many **confirmed malaria cases (HF)** there were in **Katete district** in **2020**?
+
+```{r s7_3}
+dat <- dat %>% mutate(year = lubridate::year(period))
+
+op1 = filter(dat, district == "Katete", year == 2020)
+op1
+sum(op1$confirmed)
+```
+
+### Example 2: What was **total number of RDTs conducted by HFs and CHWs** in **Sinazongwe** district in **2019**?
+
+```{r s7_4}
+op2 = filter(dat, district == "Sinazongwe", year == 2019)
+op2
+sum(op2$tested) + sum(op2$tested_passive_chw)
+```
+
+> $\color{red}{\text{Question 9: What happens if we repeat this for Chama district?, Why?}}$
+
+It's really important to look at your data closely! We can fix this problem by using the following logic:
+
+```{r s7_5}
+
+test_vector <- c(1,5,8,3,NA,6)
+sum(test_vector)
+sum(test_vector, na.rm=TRUE)
+
+```
+
+How did we know to do this? We looked at the help file for *sum* by using *?sum* and saw the option to add an argument that removes NAs.
+
+> $\color{red}{\text{Question 9 cont.: Now we know how to remove NAs, how many RDTs were conducted in Chama in 2019?}}$
+
+We will spend the next chapter learning about more ways to manipulate and aggregate data - but for now, you can try and answer these questions using the examples above!
+
+> $\color{teal}{\text{Final exercise 1: What is the total number of cases (all HF and CHW) in Western province in 2020? }}$
+
+> $\color{teal}{\text{Final exercise 2: How many RDTs have been conducted by CHWs in 2021 compared to 2020?}}$
+
+> $\color{teal}{\text{Final exercise 3: In 2020, were there more malaria cases in Luapula or Muchinga?}}$
+
+## Cheat sheet of functions from this unit
+
+-   sqrt()
+-   exp()
+-   log()
+-   rep()
+-   summary()
+-   table()
+-   dim()
+-   mean()
+-   median()
+-   range()
+-   sum()
+-   str()
+-   class()
+-   head()
+-   which()
+-   read.csv()
+
+(And three functions from the tidyverse world)
+
+-   filter()
+-   summarise()
+-   pull()

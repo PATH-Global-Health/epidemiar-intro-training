@@ -2,6 +2,14 @@
 title: "Chaining multiple steps using pipes"
 ---
 
+::: callout-warning
+# Check your R version!
+
+Some of the training material will use a special operator called the "native pipe" (which looks like this: `|>`). This function was first included in R version 4.1, which was released in May 2021.
+
+If you haven't updated your R in while then it may be time to update. You can check what your current version is by running `R.version` in the console.
+:::
+
 Pipes are a powerful tool in R that enable a more readable and efficient way of chaining multiple operations. The `%>%` pipe operator, introduced by the `magrittr` package and widely popularized by the `dplyr` package in the `tidyverse`, allows you to pass the result of one function directly into the next function.
 
 ## Pipes in `tidyverse`
@@ -190,5 +198,3 @@ mtcars |>
 The introduction of the native pipe operator in R 4.1 provides a built-in and efficient way to chain operations, enhancing code readability without relying on external packages. While it lacks some of the tools of `%>%`, such as the dot placeholder, it integrates seamlessly with base R functions and custom workflows.
 
 You may encounter both types of pipes, and most often they work interchangeably. However, it is important to note the stuble differences between the tidyverse and native pipes, especially when debugging errors. 
-
-Also, remember that the native pipe is relatively new (R 4.1 waws released in 2022), so if you have not updated R in a long time than you will not have acesss to the native pipe.

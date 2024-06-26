@@ -1,5 +1,28 @@
-# Background {.unnumbered}
+# Getting started {.unnumbered}
 
-This book contains background material for general R basics, as well as some of the packages and functions that we will use during the EpidemiaR training lessons. 
+This book contains background material for general R basics, as well as some of the packages and functions that we will use during the EpidemiaR training lessons.
+
+::: callout-warning
+### Check your R version!
+
+Some of the training material will use a special operator called the "native pipe" (which looks like this: `|>`). This function was first included in R version 4.1, which was released in May 2021.
+
+If you haven't updated your R in while then it may be time to update. You can check what your current version is by running `R.version` in the console.
+:::
+
+## Installing packages
+
+The training lessons will use several R packages. We will discuss these in more detail in the following sections, but it is a good idea to get everything installed and downloaded before we dive in. Note that depending on your internet connection this may take some time.
+
+Use this code in R to install the packages:
+
+``` r
+# Installing packages
+install.packages(
+  c("dplyr","knitr","lubridate","parallel","readr","readxl","tidyr","tinytex",
+    "tools","tidyverse","janitor","writexl","sf","ISOweek"))
+```
 
 Additional materials and resources:
+
+-   WIP!

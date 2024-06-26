@@ -2,25 +2,33 @@ project:
   type: book
 
 book:
-  title: "EpidemiaR Introductiory Materials"
-  author: "Justin Millar"
+  title: "EpidemiaR Introductory Materials"
+  author: 
+    - Justin Millar
+    - Amir Siraj
   date: "6/20/2024"
   chapters:
     - index.qmd
-    - base-r-intro.qmd
-    - if-statements.qmd
-    - more-base.qmd
-    - pipes.qmd
-    - dpylr-tidyr-intro.qmd
-    - joins.qmd
+    - part: base-r-intro.qmd
+      chapters: 
+        - if-statements.qmd
+        - more-base.qmd
+        - pipes.qmd
+    - part: dpylr-tidyr-intro.qmd
+      chapters: 
+        - joins.qmd
 
 # bibliography: references.bib
 
 format:
   html:
     theme: cosmo
+    number-sections: false
   pdf:
     documentclass: scrreprt
+  docx:
+    highlight-style: github
+
 
 editor: visual
 

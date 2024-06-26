@@ -4,17 +4,14 @@ title: "Joining data in tidyverse"
 
 Joining dataframes is a common task in data analysis, enabling you to combine datasets based on common keys. The `dplyr` package in the `tidyverse` provides several functions for different types of joins. This tutorial will focus on the `left_join()` function.
 
+## Joins overview
+
 ### Installing and Loading the `tidyverse` Package
 
 First, ensure that you have the `tidyverse` package installed and loaded.
 
-**Install the `tidyverse` package:**
-```r
-install.packages("tidyverse")
-```
-
 **Load the `tidyverse` package:**
-```r
+```{r}
 library(tidyverse)
 ```
 
@@ -23,7 +20,7 @@ library(tidyverse)
 Let's create two example dataframes for illustration.
 
 **Creating Dataframe 1:**
-```r
+```{r}
 df1 <- tibble(
   id = c(1, 2, 3, 4),
   name = c("Alice", "Bob", "Charlie", "David")
@@ -31,19 +28,8 @@ df1 <- tibble(
 print(df1)
 ```
 
-**Output:**
-```
-# A tibble: 4 × 2
-     id name  
-  <dbl> <chr> 
-1     1 Alice 
-2     2 Bob   
-3     3 Charlie
-4     4 David
-```
-
 **Creating Dataframe 2:**
-```r
+```{r}
 df2 <- tibble(
   id = c(1, 2, 4, 5),
   score = c(85, 90, 88, 92)
@@ -51,52 +37,35 @@ df2 <- tibble(
 print(df2)
 ```
 
-**Output:**
-```
-# A tibble: 4 × 2
-     id score
-  <dbl> <dbl>
-1     1    85
-2     2    90
-3     4    88
-4     5    92
-```
-
 ### Using `left_join()`
 
 The `left_join()` function combines rows from `df1` with matching rows from `df2`. If there is no match, the result will contain `NA` for the columns from `df2`.
 
 **Syntax:**
-```r
+
+``` r
 left_join(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 ```
-- `x`: The left dataframe.
-- `y`: The right dataframe.
-- `by`: A character vector of variables to join by. If `NULL`, defaults to all variables with common names in `x` and `y`.
+
+-   `x`: The left dataframe.
+-   `y`: The right dataframe.
+-   `by`: A character vector of variables to join by. If `NULL`, defaults to all variables with common names in `x` and `y`.
 
 **Example:**
-```r
+
+```{r}
 joined_df <- left_join(df1, df2, by = "id")
 print(joined_df)
 ```
 
-**Output:**
-```
-# A tibble: 4 × 3
-     id name    score
-  <dbl> <chr>   <dbl>
-1     1 Alice      85
-2     2 Bob        90
-3     3 Charlie    NA
-4     4 David      88
-```
 
 ### Handling Different Column Names
 
 If the key columns have different names in the dataframes, use the `by` argument to specify the columns to join by.
 
 **Example with Different Column Names:**
-```r
+
+```{r}
 df3 <- tibble(
   student_id = c(1, 2, 4, 5),
   grade = c("A", "B", "B+", "A-")
@@ -104,19 +73,47 @@ df3 <- tibble(
 
 joined_df2 <- left_join(df1, df3, by = c("id" = "student_id"))
 print(joined_df2)
+
 ```
 
-**Output:**
-```
-# A tibble: 4 × 3
-     id name    grade
-  <dbl> <chr>   <chr>
-1     1 Alice   A    
-2     2 Bob     B    
-3     3 Charlie NA   
-4     4 David   B+
+## Example from training data
+
+Comparing cases between different woredas is sometimes desirable when we compare 'apples with apples', and make the variable normalized for the population in each woreda. Let us look at the following question.
+
+> Question 1: We want to identify woredas that have the highest annual confirmed cases per population in 2020.
+
+To do this task, we need two datasets: one with confirmed cases, and another with population totals, both at the woreda-level. First, let's load the two datasets we will be using.
+
+```{r join-dat}
+confirmed_cases_annual<- read_csv("data/training_case_data_long.csv")
+population_annual <- read_csv("data/training_population_data_long.csv")
 ```
 
-### Conclusion
+Before we join two data frames, we need to identify which columns we can use to join them together.
+
+There are two important things we need to do before we can do the join.
+
+-   Identify which columns are common in both data frames. Note that the columns we use for joining may not have similar names in both data frames.
+
+-   Make sure the common columns (fields) have the same data type. We cannot use columns that have different data types to join two data frames.
+
+The following script does the task of joining the two data frames, where we choose the case data to be the receiving data frame and the population dataset the server data frame.
+
+```{r join}
+annual_incidence <- confirmed_cases_annual %>%
+  filter( year == 2020) %>%
+  group_by (region, zone, woreda, year) %>%
+  summarise(annual_cases = sum(count, na.rm=TRUE)) %>%
+  left_join(population_annual, by = c("region" = "region",
+                                      "zone" = "zone",
+                                      "woreda" = "woreda",
+                                      "year" = "year")) %>%
+  mutate(api = annual_cases/ population * 1000) %>%
+  arrange(desc(api))
+```
+
+The function `left_join()` assumes that the data frame on the left of it is the master (receiver) while the one on its right side is the server data frame. This makes sure all rows on the left side will be included in the output even if there are no corresponding data rows in the data frame on the right side of the function. Any observations from the left side with no match on the right will have an `NA` value associated with them in the new joined dataset for the joined fields.
+
+## Conclusion
 
 Using the `left_join()` function from the `dplyr` package in the `tidyverse`, you can easily join dataframes based on common keys. This is useful for combining related datasets and performing comprehensive data analysis. By understanding the basics of joins, you can leverage the power of `dplyr` to handle more complex data manipulations.
