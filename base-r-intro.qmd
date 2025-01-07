@@ -64,7 +64,7 @@ Firstly go to **file -\> new project**, then select **new directory**, then **ne
 
 ![](hs_images/fig_4_projects.PNG){width="70%"}
 
-Define your directory (folder) name (I'd suggest something like **R_training_workshop_Sept23**)\
+Define your directory (folder) name (I'd suggest something like **EpidemiaR_workshop_2025**)\
 Then use the **browse** option to save this folder somewhere sensible for you (I tend to save things like this in a training folder on my box drive)
 
 ![](hs_images/fig_5_projects2.PNG){width="70%"}
@@ -124,7 +124,7 @@ By adding the '\#' before a line of code, it will not be run in your console
 ```{r help 3, eval = FALSE}
 # write in a description here so you can remember what you did in the future!
 # here I am using the formula for the area of a circle pi * r^2
-area_of_cirlce <- pi * 4 ^2
+area_of_circle <- pi * 4 ^2
 ```
 
 You can also comment out (i.e. add a \# before them) lines of code that are maybe wrong or not needed in an analysis before you decide if you need to actually delete them or not. This is good practice, because sometimes we are too hasty in deleting lines of code that we might actually need!
@@ -220,7 +220,7 @@ Different types of brackets have different roles in R, so it's important you use
 -   Square brackets - **\[\]** - are used to access elements of vectors (and dataframes and other complex structures)
 -   Round brackets - **()** - are used to contain the arguments of a function - i.e. in sqrt(25), the argument to the function 'sqrt' is '25'
 
-> \> Question 1: What happens if you try to find an element that doesn\'t exist? (e.g. the 0th or 6th element of v1 - how do you type this and what is the output?)
+> \> Question 1: What happens if you try to find an element that doesn't exist? (e.g. the 0th or 6th element of v1 - how do you type this and what is the output?)
 
 You can calculate summary statistics of, and plot, a vector. What do each of these do?:
 
@@ -237,7 +237,7 @@ plot(v1)
 plot(v2,v1)
 ```
 
-> Question 2: What happens if you try to do use these operations on v3 rather than v1?
+> Question 2: What happens if you try to use these operations on v3 rather than v1?
 
 > Question 3: Try v1\* v2 - What has the operator \* done to your vectors? Is that what you expected?
 
@@ -391,9 +391,15 @@ mean(CO2$uptake[which(CO2$Type == "Quebec")])
 
 The **tidyverse** approach, which we are covering in depth tomorrow uses a function called *filter*
 
+::: {.callout-warning}
+If this line does not work, you may still need to install the tidyverse package:
+
+`install.packages("tidyverse")`
+:::
+
 ```{r s5_18}
 
-op1 = filter(CO2, Type == "Quebec")
+op1 = dplyr::filter(CO2, Type == "Quebec")
 mean(op1$uptake)
 
 ```
@@ -402,7 +408,7 @@ We can also filter by 2 or more criteria
 
 ```{r s5_18b}
 
-op2 = filter(CO2, Type == "Quebec", Treatment == "chilled")
+op2 = dplyr::filter(CO2, Type == "Quebec", Treatment == "chilled")
 mean(op2$uptake)
 
 ```

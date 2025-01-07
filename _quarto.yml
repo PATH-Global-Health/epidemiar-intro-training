@@ -9,14 +9,12 @@ book:
   date: "6/20/2024"
   chapters:
     - index.qmd
-    - part: base-r-intro.qmd
-      chapters: 
-        - if-statements.qmd
-        - more-base.qmd
-        - pipes.qmd
-    - part: dpylr-tidyr-intro.qmd
-      chapters: 
-        - joins.qmd
+    - base-r-intro.qmd
+    - if-statements.qmd
+    - more-base.qmd
+    - pipes.qmd
+    - dpylr-tidyr-intro.qmd
+    - joins.qmd
 
 # bibliography: references.bib
 
@@ -27,6 +25,7 @@ format:
   pdf:
     documentclass: scrreprt
   docx:
+    toc: false
     highlight-style: github
 
 
